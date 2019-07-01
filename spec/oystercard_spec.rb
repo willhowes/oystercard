@@ -23,7 +23,20 @@ describe Oystercard do
     it 'allows you to top up to the maxumum limit' do
       expect(subject.top_up Oystercard::MAXIMUM_BALANCE).to eq subject.balance
     end
+  end
 
+  describe '#deduct' do
+    it "Deducts a spcified amount from the balane of the card" do
+      subject.top_up 10
+      expect{ subject.deduct(5) }.to change{ subject.balance }.by -5
+    end
+  end
+
+  describe '#touch_in' do
+    it "Commences a journey" do
+      subject.touch_in
+      expect(subject.in_journey).to eq true
+    end
   end
 
 end

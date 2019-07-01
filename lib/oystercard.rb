@@ -5,10 +5,11 @@ class Oystercard
   DEFAULT_BALANCE = 0
   MAXIMUM_BALANCE = 90
 
-  attr_reader :balance
+  attr_reader :balance, :in_journey
 
   def initialize
     @balance = DEFAULT_BALANCE
+    @in_journey = false
   end
 
   def top_up(amount)
@@ -18,7 +19,21 @@ class Oystercard
     return @balance
   end
 
+  def deduct(amount)
+    @balance -= amount
+    puts "Spent £#{amount}. New balance: £#{@balance}"
+    return @balance
+  end
+
+  def touch_in
+    @in_journey = true
+  end
+
   private
+
+  # def in_journey
+  #   @in_journey = true
+  # end
 
   # def limit_exceded?
   #   @balance > 90
