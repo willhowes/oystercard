@@ -34,9 +34,17 @@ describe Oystercard do
 
   describe '#touch_in' do
     it "Commences a journey" do
-      subject.touch_in
-      expect(subject.in_journey).to eq true
+      expect(subject.touch_in).to eq subject.in_journey
     end
   end
+
+  describe '#touch_out' do
+    it "Ends a journey" do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey).to eq false
+    end
+  end
+
 
 end

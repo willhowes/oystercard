@@ -29,9 +29,11 @@ class Oystercard
     @in_journey = true
   end
 
-  private
+  def touch_out
+    @in_journey = false
+  end
 
-  # def in_journey
+  # def in_journey?
   #   @in_journey = true
   # end
 
@@ -41,4 +43,4 @@ class Oystercard
 
 end
 
-binding.pry
+# binding.pry
