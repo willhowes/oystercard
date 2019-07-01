@@ -5,6 +5,7 @@ class Oystercard
   DEFAULT_BALANCE = 0
   MAXIMUM_BALANCE = 90
   MINUMUM_BALANCE = 1
+  MINUMUM_CHARGE = 1
 
   attr_reader :balance, :in_journey
 
@@ -20,18 +21,19 @@ class Oystercard
     return @balance
   end
 
-  def deduct(amount)
-    @balance -= amount
-    puts "Spent £#{amount}. New balance: £#{@balance}"
-    return @balance
-  end
-
   def touch_in
-    @balance < MINUMUM_BALANCE ? raise("Insufficient funds") : @in_journey = true
+    @balance < MINUMUM_BALANCE ? raise("Insufficient funds") : @in_journey = true 
   end
 
   def touch_out
+    deduct
     @in_journey = false
+  end
+
+  private
+
+  def deduct
+    @balance -= MINUMUM_CHARGE
   end
 
   # def in_journey?

@@ -25,12 +25,12 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it "Deducts a spcified amount from the balane of the card" do
-      subject.top_up 10
-      expect{ subject.deduct(5) }.to change{ subject.balance }.by -5
-    end
-  end
+  # describe '#deduct' do
+  #   it "Deducts a spcified amount from the balane of the card" do
+  #     subject.top_up 10
+  #     expect{ subject.deduct(5) }.to change{ subject.balance }.by -5
+  #   end
+  # end
 
   describe '#touch_in' do
     it "Commences a journey" do
@@ -41,6 +41,7 @@ describe Oystercard do
     it 'raises an error if there are insufficient funds' do
       expect{ subject.touch_in }.to raise_error("Insufficient funds")
     end
+
   end
 
   describe '#touch_out' do
@@ -49,6 +50,12 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey).to eq false
+    end
+
+    it 'deducts the fare from the balance (£1) after a journey' do
+      subject.top_up 5
+      subject.touch_in
+      expect{ subject.touch_out }.to change{ subject.balance }.by (-Oystercard::MINUMUM_CHARGE)
     end
   end
 
