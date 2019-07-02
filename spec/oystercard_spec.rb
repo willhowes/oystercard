@@ -2,7 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
 
-  let(:station) { double :station}
+  let(:entry_station) { double :station}
+  let(:exit_station) { double :station}
 
   describe '#top_up' do
 
@@ -19,18 +20,18 @@ describe Oystercard do
   describe '#touch_in' do
     it "Commences a journey" do
       subject.top_up 1
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      subject.touch_in(entry_station)
+      expect(subject.entry_station).to eq entry_station
     end
 
     it 'raises an error if there are insufficient funds' do
-      expect{ subject.touch_in(station) }.to raise_error("Insufficient funds")
+      expect{ subject.touch_in(entry_station) }.to raise_error("Insufficient funds")
     end
 
     it 'Sets station at touch_in' do
       subject.top_up(1)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      subject.touch_in(entry_station)
+      expect(subject.entry_station).to eq entry_station
     end
 
   end
@@ -38,29 +39,38 @@ describe Oystercard do
   describe '#touch_out' do
     it "Ends a journey" do
       subject.top_up 5
-      subject.touch_in(station)
-      subject.touch_out
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
       expect(subject.entry_station).to eq nil
     end
 
     it 'deducts the fare from the balance (£1) after a journey' do
       subject.top_up 5
-      subject.touch_in(station)
-      expect{ subject.touch_out }.to change{ subject.balance }.by (-Oystercard::MINUMUM_CHARGE)
+      subject.touch_in(entry_station)
+      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by (-Oystercard::MINUMUM_CHARGE)
     end
 
     it 'Sets entry_station to nil on touch_out' do
       subject.top_up 1
-      subject.touch_in(station)
-      subject.touch_out
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
       expect(subject.entry_station).to eq nil
+    end
+
+    it {is_expected.to respond_to(:touch_out).with(1).argument}
+
+    it 'stores journey in journeys variable' do
+      subject.top_up 1
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journeys).to eq [{:entry_station => entry_station, :exit_station => exit_station}]
     end
   end
 
   describe '#in_journey?' do
     it "Checks if in_journey" do
       subject.top_up 1
-      subject.touch_in(station)
+      subject.touch_in(entry_station)
       expect(subject.in_journey?).to eq true
     end
 
