@@ -44,14 +44,6 @@ class Oystercard
     @balance -= MINUMUM_CHARGE
   end
 
-  # def in_journey?
-  #   @in_journey = true
-  # end
-
-  # def limit_exceded?
-  #   @balance > 90
-  # end
-
 end
 
 # binding.pry
