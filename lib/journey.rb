@@ -2,21 +2,22 @@ require 'oystercard'
 
 class Journey
 
+attr_reader :entry_station
+attr_reader :exit_station
+
   def initialize
     @in_journey = false
     @entry_station
     @exit_station
   end
 
-  def start(entry_station, oystercard)
-    @oystercard = oystercard
+  def start(entry_station)
     @entry_station = entry_station
     @in_journey = true
   end
 
-  def finish(exit_station, oystercard)
+  def finish(exit_station)
     @exit_station = exit_station
-    oystercard.journeys << {entry_station: @entry_station, exit_station: @exit_station}
     @in_journey = false
   end
 
