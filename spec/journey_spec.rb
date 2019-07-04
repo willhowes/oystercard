@@ -21,5 +21,16 @@ describe Journey do
     end
   end
 
+  describe '#fare' do
+    it 'returns minimum fare' do
+      subject.start(entry_station)
+      subject.finish(exit_station)
+      expect(subject.fare).to eq Oystercard::MINUMUM_CHARGE
+    end
 
+    it 'returns penalty fare of 6 if no entry station on finish' do
+      subject.finish(exit_station)
+      expect(subject.fare).to eq Oystercard::PENALTY_FARE
+    end
+  end
 end

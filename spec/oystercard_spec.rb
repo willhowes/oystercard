@@ -46,6 +46,12 @@ describe Oystercard do
          journey = subject.journey
          expect(journey.in_journey?).to eq true
        end
+
+       it 'returns penalty fare of 6 if start journey twice' do
+         subject.top_up(10)
+         subject.touch_in
+         expect{ subject.touch_in }.to change{ subject.balance }.from(10).to(4)
+       end
      end
 
 end
