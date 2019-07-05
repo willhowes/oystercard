@@ -10,7 +10,7 @@ describe Oystercard do
 
     it 'raises an error if maximum limit (£90) is reached' do
       subject.top_up Oystercard::MAXIMUM_BALANCE
-      expect{ subject.top_up 1 }.to raise_error("Maximum limit of #{Oystercard::MAXIMUM_BALANCE} exceded")
+      expect{ subject.top_up 10 }.to raise_error("Maximum limit of #{Oystercard::MAXIMUM_BALANCE} exceded")
     end
 
     it 'allows you to top up to the maxumum limit' do
@@ -25,14 +25,14 @@ describe Oystercard do
 
   describe '#touch_out' do
 
-    it 'deducts the fare from the balance (£1) after a journey' do
-      subject.top_up 5
+    it 'deduct_fares the minimum fare from the balance after a complete journey' do
+      subject.top_up 10
       subject.touch_in
-      expect{ subject.touch_out }.to change{ subject.balance }.by (-Oystercard::MINUMUM_CHARGE)
+      expect{ subject.touch_out }.to change{ subject.balance }.by(5)
     end
 
     it 'stores journey in journeys variable' do
-      subject.top_up 1
+      subject.top_up 10
       subject.touch_in
       subject.touch_out
       expect(subject.journeys.length).to eq 1
@@ -40,17 +40,11 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
-       it "Checks if in_journey if touched in" do
-         subject.top_up 1
-         subject.touch_in
-         journey = subject.journey
-         expect(journey.in_journey?).to eq true
-       end
 
        it 'returns penalty fare of 6 if start journey twice' do
          subject.top_up(10)
          subject.touch_in
-         expect{ subject.touch_in }.to change{ subject.balance }.from(10).to(4)
+         expect{ subject.touch_in }.to change{ subject.balance }.by(-Oystercard::PENALTY_FARE)
        end
      end
 
